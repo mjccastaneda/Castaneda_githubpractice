@@ -1,2 +1,2 @@
 # Castaneda_githubpractice
-To be posted soon
+MJ's Repository for Exercises
