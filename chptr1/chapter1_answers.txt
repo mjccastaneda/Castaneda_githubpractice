@@ -32,3 +32,10 @@ git config --global user.email "email"(without "")
 
 Setting your Editor:
 git config --global core.editor emacs
+
+------Getting Help--------
+git help <verb>
+git <verb> --help
+man git-<verb>
+Example:
+git help config
