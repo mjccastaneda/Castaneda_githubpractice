@@ -1,1 +1,108 @@
-These are the answers for Chapter 2
+In Getting a Git Repository:
+1. Initialize a Repository in an Existing Directory
+      - git init
+      
+ 1.1. If you want to start version-controlling on existing files rather than empty directory:
+      - git add *.c
+      - git add LICENSE
+      - git commit -m 'initial project version'
+
+2. Cloning an Existing Repository
+ * If you want to clone the Git linkable library called libgit3, you can do so like this:
+      - git clone https://github.com/libgit3/libgit3
+ * If you want to clone the repository into a directory named other than libgi3, you can do so like this:
+      - git clone https://github.com/libgit3/libgi3 mylibgit3
+-------------------------------------------------------------------------------------------------------------------------
+In Recording Changes to the Repository:
+1. Checking the Status of Your Files
+      - git status
+        ~ This will display:
+            On branch master
+            nothing to commit, working directory clean
+   If you add a new file to your project, for example README file. If the file didn't exist before, it is untracked:
+      - echo 'My Project' > README
+      - git status
+         ~ This will display:
+             On branch master
+             Untracked files:
+             (use "git add <file>..." to include in what will be committed)
+
+                README
+
+             nothing added to commit but untracked files present (use "git add" to track)
+
+2. Tracking New Files
+    * To begin tracking the README file, simply do:
+      - git add README
+    * When you run the status (git status), this will display:
+      On branch master
+      Changes to be committed:
+      (use "git reset HEAD <file>..." to unstage)
+
+        new file:   README
+
+3. Staging Modified Files
+    * If you change a previously tracked file called "chptr2.md" and run git status, you'll get this:
+      On branch master
+      Changes to be committed:
+      (use "git reset HEAD <file>..." to unstage)
+
+        new file:   README
+
+      Changes not staged for commit:
+      (use "git add <file>..." to update what will be committed)
+      (use "git checkout -- <file>..." to discard changes in working directory)
+
+        modified:   chptr2.md
+        
+    * The above status states that a file that is tracked has been modified but not yet staged. To stage, simply do:
+      git add chptr2.md; 
+      and when you run git status, you'll see this:
+       On branch master
+       Changes to be committed:
+       (use "git reset HEAD <file>..." to unstage)
+
+         new file:   README
+         modified:   chptr2.md
+    * If you want to make changes to "chptr2.md", do vim chptr2.md and add it again.
+
+4. Short Status
+    * To get a status of your changes in a more compact way, do:
+      - git status -s
+    * This will display:
+        M README
+        MM Rakefile
+        A  lib/git.rb
+        M  lib/simplegit.rb
+        ?? LICENSE.txt
+
+5. Ignoring Files
+    * To ignore files, simply do:
+      - cat .gitignore
+    * It would display something like this:
+        *.[oa] (It means that it will ignore all files ending in ".o" or ".a"
+        *~ (It means that it will ignore all files ending with a tilde)
+
+6. Viewing Your Staged and Unstaged Changes
+    * If git status is too vague, use git diff
+
+7. Committing Your Changes
+    * To commit your changes, simply type:
+      - git commit
+    * To type your own commit message, it must be after -m flag, like this:
+      - git commit -m "Story 1182: Fix benchmarks for speed"
+      
+8. Skipping the Staging Area
+    * To skip the staging area, simple put an -a flag, like this:
+      - git commit -a -m 'added new skins'
+      
+9. Removing Files
+    * To remove files using "rm PROJECTS.md", it shows up under the "Changed but not updated", then if you run "git         rm", it stages the file's removal.
+
+10. Moving Files
+    * To move files, simply do:
+      - git mv file_from file_to (git mv README.md README)
+    * Git considers it a renamed file, which is equivalent to running something like this:
+      - mv README.md README
+      - git rm README.md
+      - git add README
