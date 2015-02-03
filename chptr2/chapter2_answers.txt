@@ -150,9 +150,9 @@ In Viewing the Commit History:
       --name-only - Show the list of files modified after the commit information.
       --name-status - Show the list of files affected with added/modified/deleted information as well.
       --abbrev-commit - Show only the first few characters of the SHA-1 checksum instead of all 40.
-      --relative-date - Display the date in a relative format (for example, “2 weeks ago”) instead of using the full                          date format.
+      --relative-date - Display the date in a relative format (for example, “2 weeks ago”) instead of using the full date format.
       --graph - Display an ASCII graph of the branch and merge history beside the log output.
-      --pretty - Show commits in an alternate format. Options include oneline, short, full, fuller, and format (where                   you specify your own format).
+      --pretty - Show commits in an alternate format. Options include oneline, short, full, fuller, and format (where you specify your own format).
 
 1. Limiting Log Output:
       -(n) - Show only the last n commits
@@ -175,7 +175,7 @@ In Undoing Things:
 In Working with Remotes:
 1. Showing Your Remotes
  - git remote
- - git remote -v (-v shows the URLs that Git has stored for the shortname to be used when reading and writing to that                   remote)
+ - git remote -v (-v shows the URLs that Git has stored for the shortname to be used when reading and writing to that remote)
  
  2. Adding Remote Repositories
  - git remote add [shortname] [url] (git remote add pb https://github.com/paulboone/ticgit)
