@@ -1,1 +1,217 @@
-These are the answers in Chapter 3
+Before we create a branch, first you stage your 3 files:
+- git add README test.rb LICENSE
+- git commit -m 'initial commit of my project'
+-------------------------------------------------------------------------------------------------------------------------
+In Creating a New Branch:
+- git branch <nameofthebranch> (git branch testing)
+ * To see where the branch pointers are pointing, do:
+   - git log --oneline --decorate
+-------------------------------------------------------------------------------------------------------------------------
+In Switching Branches:
+- git checkout <nameofthebranch> (git checkout testing)
+*Do another commit
+- vim test.rb
+- git commit -a -m 'made a change'
+*To switch back to master branch
+ - git checkout master
+* To view log
+ - git log --oneline --decorate --graph --all
+ ------------------------------------------------------------------------------------------------------------------------
+ In Basic Branching:
+ - git checkout -b <newbranch> (git checkout -b iss53)
+  *This is a shorthand for:
+   - git branch iss53
+   - git checkout iss53
+You work on your web site and do some commits. Doing so moves the iss53 branch forward, because you have it checked out (that is, your HEAD is pointing to it):
+- vim index.html
+- git commit -a -m 'added a new footer [issue 53]'
+
+Then:
+- git checkout master (switch to master branch)
+- git checkout -b hotfix (switch to a new branch 'hotfix')
+- vim index.html
+- git commit -a -m 'fixed the broken email address'
+
+Then:
+- git checkout master
+- git merge hotfix
+
+To delete:
+- git branch -d <branchname> (git branch -d hotfix)
+*Now you can go back to your work in progress branch on issue #53
+----------------------------------------------------------------------------------------------------------------------
+In Basic Merging:
+$ git checkout master
+Switched to branch 'master'
+$ git merge iss53
+Merge made by the 'recursive' strategy.
+index.html |    1 +
+1 file changed, 1 insertion(+)
+
+Now that your work is merged, you have no further need of your branch, so delete it:
+$ git branch -d iss53
+----------------------------------------------------------------------------------------------------------------------
+In Merging Conflicts:
+$ git merge iss53
+Auto-merging index.html
+CONFLICT (content): Merge conflict in index.html
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ git status
+On branch master
+You have unmerged paths.
+  (fix conflicts and run "git commit")
+
+Unmerged paths:
+  (use "git add <file>..." to mark resolution)
+
+    both modified:      index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+$ git mergetool
+
+This message is displayed because 'merge.tool' is not configured.
+See 'git mergetool --tool-help' or 'git help config' for more details.
+'git mergetool' will now attempt to use one of the following tools:
+opendiff kdiff3 tkdiff xxdiff meld tortoisemerge gvimdiff diffuse diffmerge ecmerge p4merge araxis bc3 codecompare vimdiff emerge
+Merging:
+index.html
+
+Normal merge conflict for 'index.html':
+  {local}: modified file
+  {remote}: modified file
+Hit return to start merge resolution tool (opendiff):
+
+$ git status
+On branch master
+All conflicts fixed but you are still merging.
+  (use "git commit" to conclude merge)
+
+Changes to be committed:
+
+    modified:   index.html
+    
+    Merge branch 'iss53'
+
+Conflicts:
+    index.html
+#
+# It looks like you may be committing a merge.
+# If this is not correct, please remove the file
+#	.git/MERGE_HEAD
+# and try again.
+
+
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# All conflicts fixed but you are still merging.
+#
+# Changes to be committed:
+#	modified:   index.html
+#
+----------------------------------------------------------------------------------------------------------------------
+In Branch Management:
+$ git branch
+  iss53
+* master
+  testing
+  
+$ git branch -v
+  iss53   93b412c fix javascript issue
+* master  7a98805 Merge branch 'iss53'
+  testing 782fd34 add scott to the author list in the readmes
+  
+$ git branch --merged
+  iss53
+* master
+
+$ git branch --no-merged
+  testing
+
+$ git branch -d testing
+error: The branch 'testing' is not fully merged.
+If you are sure you want to delete it, run 'git branch -D testing'.
+----------------------------------------------------------------------------------------------------------------------
+Branching Workflows
+In Long-Running Branches:
+Because Git uses a simple three-way merge, merging from one branch into another multiple times over a long period is generally easy to do. This means you can have several branches that are always open and that you use for different stages of your development cycle; you can merge regularly from some of them into others.
+----------------------------------------------------------------------------------------------------------------------
+In Topic Branches:
+Topic branches, however, are useful in projects of any size. A topic branch is a short-lived branch that you create and use for a single particular feature or related work. This is something you’ve likely never done with a VCS before because it’s generally too expensive to create and merge branches. But in Git it’s common to create, work on, merge, and delete branches several times a day.
+----------------------------------------------------------------------------------------------------------------------
+In Remote Branching:
+They take the from (remote)/(branch)
+----------------------------------------------------------------------------------------------------------------------
+In Pushing the Branch:
+$ git push origin serverfix
+Counting objects: 24, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (15/15), done.
+Writing objects: 100% (24/24), 1.91 KiB | 0 bytes/s, done.
+Total 24 (delta 2), reused 0 (delta 0)
+To https://github.com/schacon/simplegit
+ * [new branch]      serverfix -> serverfix
+ 
+$ git fetch origin
+remote: Counting objects: 7, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 3 (delta 0), reused 3 (delta 0)
+Unpacking objects: 100% (3/3), done.
+From https://github.com/schacon/simplegit
+ * [new branch]      serverfix    -> origin/serverfix
+ 
+ $ git checkout -b serverfix origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+----------------------------------------------------------------------------------------------------------------------
+In Tracking Branches:
+
+$ git checkout --track origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+
+$ git checkout -b sf origin/serverfix
+Branch sf set up to track remote branch serverfix from origin.
+Switched to a new branch 'sf'
+
+$ git branch -u origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+
+$ git branch -vv
+  iss53     7e424c3 [origin/iss53: ahead 2] forgot the brackets
+  master    1ae2a45 [origin/master] deploying index fix
+* serverfix f8674d9 [teamone/server-fix-good: ahead 3, behind 1] this should do it
+  testing   5ea463a trying something new
+----------------------------------------------------------------------------------------------------------------------
+In Pulling a Branch:
+git fetch and git merge(ideally) because git pull is confusing
+----------------------------------------------------------------------------------------------------------------------
+In Deleting a Branch:
+$ git push origin --delete serverfix
+To https://github.com/schacon/simplegit
+ - [deleted]         serverfix
+----------------------------------------------------------------------------------------------------------------------
+In Basic Rebasing:
+$ git checkout experiment
+$ git rebase master
+First, rewinding head to replay your work on top of it...
+Applying: added staged command
+
+$ git checkout master
+$ git merge experiment
+----------------------------------------------------------------------------------------------------------------------
+In More Interesting Rebases:
+$ git rebase --onto master server client
+
+$ git checkout master
+$ git merge client
+
+$ git rebase master server
+
+$ git checkout master
+$ git merge server
+
+$ git branch -d client
+$ git branch -d server
