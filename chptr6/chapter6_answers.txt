@@ -1,1 +1,149 @@
-These are the answers in Chapter 6
+In GitHub Flow:
+$ git clone https://github.com/tonychacon/blink [1]
+Cloning into 'blink'...
+
+$ cd blink
+$ git checkout -b slow-blink [2]
+Switched to a new branch 'slow-blink'
+
+$ sed -i '' 's/1000/3000/' blink.ino [3]
+
+$ git diff --word-diff [4]
+diff --git a/blink.ino b/blink.ino
+index 15b9911..a6cc5a5 100644
+--- a/blink.ino
++++ b/blink.ino
+@@ -18,7 +18,7 @@ void setup() {
+// the loop routine runs over and over again forever:
+void loop() {
+  digitalWrite(led, HIGH);   // turn the LED on (HIGH is the voltage level)
+  [-delay(1000);-]{+delay(3000);+}               // wait for a second
+  digitalWrite(led, LOW);    // turn the LED off by making the voltage LOW
+  [-delay(1000);-]{+delay(3000);+}               // wait for a second
+}
+
+$ git commit -a -m 'three seconds is better' [5]
+[slow-blink 5ca509d] three seconds is better
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+$ git push origin slow-blink [6]
+Username for 'https://github.com': tonychacon
+Password for 'https://tonychacon@github.com':
+Counting objects: 5, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 340 bytes | 0 bytes/s, done.
+Total 3 (delta 1), reused 0 (delta 0)
+To https://github.com/tonychacon/blink
+ * [new branch]      slow-blink -> slow-blink
+
+*The Flow: 
+1
+
+    Clone our fork of the project locally
+2
+
+    Create a descriptive topic branch
+3
+
+    Make our change to the code
+4
+
+    Check that the change is good
+5
+
+    Commit our change to the topic branch
+6
+
+    Push our new topic branch back up to our GitHub fork
+----------------------------------------------------------------------------------------------------------------------
+In Advance Pull Request:
+$ git remote add upstream https://github.com/schacon/blink [1]
+
+$ git fetch upstream [2]
+remote: Counting objects: 3, done.
+remote: Compressing objects: 100% (3/3), done.
+Unpacking objects: 100% (3/3), done.
+remote: Total 3 (delta 0), reused 0 (delta 0)
+From https://github.com/schacon/blink
+ * [new branch]      master     -> upstream/master
+
+$ git merge upstream/master [3]
+Auto-merging blink.ino
+CONFLICT (content): Merge conflict in blink.ino
+Automatic merge failed; fix conflicts and then commit the result.
+
+$ vim blink.ino [4]
+$ git add blink.ino
+$ git commit
+[slow-blink 3c8d735] Merge remote-tracking branch 'upstream/master' \
+    into slower-blink
+
+$ git push origin slow-blink [5]
+Counting objects: 6, done.
+Delta compression using up to 8 threads.
+Compressing objects: 100% (6/6), done.
+Writing objects: 100% (6/6), 682 bytes | 0 bytes/s, done.
+Total 6 (delta 2), reused 0 (delta 0)
+To https://github.com/tonychacon/blink
+   ef4725c..3c8d735  slower-blink -> slow-blink
+
+*The Flow:
+
+1
+
+    Add the original repository as a remote named “upstream”
+2
+
+    Fetch the newest work from that remote
+3
+
+    Merge the main branch into your topic branch
+4
+
+    Fix the conflict that occurred
+5
+
+    Push back up to the same topic branch
+----------------------------------------------------------------------------------------------------------------------
+In Managing Pull Request:
+$ curl http://github.com/tonychacon/fade/pull/1.patch | git am
+
+$ git ls-remote https://github.com/schacon/blink
+10d539600d86723087810ec636870a504f4fee4d	HEAD
+10d539600d86723087810ec636870a504f4fee4d	refs/heads/master
+6a83107c62950be9453aac297bb0193fd743cd6e	refs/pull/1/head
+afe83c2d1a70674c9505cc1d8b7d380d5e076ed3	refs/pull/1/merge
+3c8d735ee16296c242be7a9742ebfbc2665adec1	refs/pull/2/head
+15c9f4f80973a2758462ab2066b6ad9fe8dcf03d	refs/pull/2/merge
+a5a7751a33b7e86c5e9bb07b26001bb17d775d1a	refs/pull/4/head
+31a45fc257e8433c8d8804e3e848cf61c9d3166c	refs/pull/4/merge
+
+$ git fetch origin refs/pull/958/head
+From https://github.com/libgit2/libgit2
+ * branch            refs/pull/958/head -> FETCH_HEAD
+ 
+*In .git/config:
+ 
+[remote "origin"]
+    url = https://github.com/libgit2/libgit2
+    fetch = +refs/heads/*:refs/remotes/origin/*
+
+[remote "origin"]
+    url = https://github.com/libgit2/libgit2.git
+    fetch = +refs/heads/*:refs/remotes/origin/*
+    fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+
+Then:
+
+$ git fetch
+# …
+ * [new ref]         refs/pull/1/head -> origin/pr/1
+ * [new ref]         refs/pull/2/head -> origin/pr/2
+ * [new ref]         refs/pull/4/head -> origin/pr/4
+# …
+
+$ git checkout pr/2
+Checking out files: 100% (3769/3769), done.
+Branch pr/2 set up to track remote branch pr/2 from origin.
+Switched to a new branch 'pr/2'
