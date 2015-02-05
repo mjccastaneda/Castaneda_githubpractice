@@ -361,3 +361,67 @@ Author: Scott Chacon <schacon@gmail.com>
 Date:   Mon Oct 22 19:38:36 2008 -0700
 
     updated the gemspec to hopefully work better
+
+$ git diff master
+
+$ git merge-base contrib master
+36c7dba2c95e6bbb78dfa822519ecfec6e1ca649
+$ git diff 36c7db
+
+$ git diff master...contrib
+----------------------------------------------------------------------------------------------------------------------
+In Integrating Contributed Work:
+$ git cherry-pick e43a6fd3e94888d76779ad79fb568ed180e5fcdf
+Finished one cherry-pick.
+[master]: created a0a41a9: "More friendly message when locking the index fails."
+ 3 files changed, 17 insertions(+), 3 deletions(-)
+ 
+ *Rerere
+ $ git config --global rerere.enabled true
+ ---------------------------------------------------------------------------------------------------------------------
+ In Tagging Your Releases:
+$ git tag -s v1.5 -m 'my signed 1.5 tag'
+You need a passphrase to unlock the secret key for
+user: "Scott Chacon <schacon@gmail.com>"
+1024-bit DSA key, ID F721C45A, created 2009-02-09
+
+$ gpg --list-keys
+/Users/schacon/.gnupg/pubring.gpg
+---------------------------------
+pub   1024D/F721C45A 2009-02-09 [expires: 2010-02-09]
+uid                  Scott Chacon <schacon@gmail.com>
+sub   2048g/45D02282 2009-02-09 [expires: 2010-02-09]
+
+$ gpg -a --export F721C45A | git hash-object -w --stdin
+659ef797d181633c87ec71ac3f9ba29fe5775b92
+
+$ git tag -a maintainer-pgp-pub 659ef797d181633c87ec71ac3f9ba29fe5775b92
+
+$ git show maintainer-pgp-pub | gpg --import
+----------------------------------------------------------------------------------------------------------------------
+In Generating Build Number:
+$ git describe master
+v1.6.2-rc1-20-g8c5b85c
+----------------------------------------------------------------------------------------------------------------------
+In Preparing a Release:
+$ git archive master --prefix='project/' | gzip > `git describe master`.tar.gz
+$ ls *.tar.gz
+v1.6.2-rc1-20-g8c5b85c.tar.gz
+
+$ git archive master --prefix='project/' --format=zip > `git describe master`.zip
+----------------------------------------------------------------------------------------------------------------------
+In The Shortlog:
+$ git shortlog --no-merges master --not v1.0.1
+Chris Wanstrath (8):
+      Add support for annotated tags to Grit::Tag
+      Add packed-refs annotated tag support.
+      Add Grit::Commit#to_patch
+      Update version and History.txt
+      Remove stray `puts`
+      Make ls_tree ignore nils
+
+Tom Preston-Werner (4):
+      fix dates in history
+      dynamic version method
+      Version bump to 1.0.2
+      Regenerated gemspec for version 1.0.2
